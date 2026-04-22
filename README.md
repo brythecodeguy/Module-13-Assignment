@@ -2,18 +2,37 @@
 
 ## Module Overview
 
-This module extends the FastAPI application by implementing a fully secured API with authentication, database integration, Docker deployment, and complete test coverage.
+This module builds on the FastAPI application by adding a complete full-stack experience, including a frontend interface, JWT-based authentication, database integration, Docker deployment, and full test coverage.
 
-The system allows users to register, authenticate, and perform calculations that are stored and retrieved from a PostgreSQL database. All protected routes require authentication using JWT tokens via OAuth2.
+The system allows users to register, log in, and perform calculations through a user-friendly interface. All calculations are stored in a PostgreSQL database and are tied to the authenticated user. Protected routes require JWT authentication using OAuth2.
+
+---
+
+## Frontend Interface
+
+A simple frontend was implemented using HTML, CSS, and JavaScript to interact with the FastAPI backend.
+
+### Features
+
+- Login and registration pages  
+- Dashboard for performing calculations  
+- Dynamic UI updates based on user actions  
+- Error and success message handling  
+- Button-based calculation system  
+
+The frontend communicates with the backend using `fetch` requests and handles authentication using JWT tokens.
 
 ---
 
 ## Docker Setup
 
 The FastAPI application runs using Uvicorn inside the container:
-uvicorn app.main:app --host 0.0.0.0 --port 8000
 
-To Start the application:
+```bash
+uvicorn app.main:app --host 0.0.0.0 --port 8000
+```
+
+To start the application:
 
 ```bash
 docker compose up --build
@@ -37,6 +56,12 @@ This starts:
 
 FastAPI (Swagger UI):  
 <http://localhost:8000/docs>  
+
+Frontend Pages:  
+
+- <http://localhost:8000/login>  
+- <http://localhost:8000/register>  
+- <http://localhost:8000/dashboard>  
 
 pgAdmin:  
 <http://localhost:5050>  
@@ -82,7 +107,8 @@ Passwords are securely hashed using bcrypt.
 - Returns:
   - access_token  
   - refresh_token  
-- Token is required for protected endpoints  
+- JWT tokens are stored in localStorage after login  
+- Tokens are included in the Authorization header for protected requests  
 
 ---
 
@@ -106,17 +132,21 @@ POST `/calculations`
 
 Example:
 
+```json
 {
   "a": 10,
   "b": 5,
   "type": "addition"
 }
+```
 
 Response:
 
+```json
 {
   "result": 15
 }
+```
 
 ---
 
@@ -137,7 +167,9 @@ Supports the following operations:
 - Multiplication  
 - Division  
 
-### Features
+---
+
+## System Features
 
 - Input validation  
 - Error handling (e.g., division by zero)  
@@ -150,7 +182,9 @@ Supports the following operations:
 
 Run tests:
 
+```bash
 pytest --run-slow --cov=app --cov-fail-under=100
+```
 
 Includes:
 
@@ -159,6 +193,7 @@ Includes:
 - API endpoint tests  
 - Authentication tests  
 - Database tests  
+- Frontend route tests  
 
 Results:
 
@@ -185,6 +220,7 @@ GitHub Actions pipeline includes:
 - JWT authentication  
 - OAuth2 password flow  
 - Protected API routes  
+- Secure token handling (localStorage + Authorization header)  
 - Dependency vulnerability scanning (Trivy)  
 - Fixed critical vulnerability:
   - python-multipart upgraded to secure version  
@@ -197,23 +233,9 @@ Includes:
 
 - FastAPI application  
 - PostgreSQL database integration  
+- Frontend interface  
 - Secure dependencies  
 - Production-ready configuration  
-
----
-
-## Screenshots
-
-Include the following in your submission:
-
-- [Module13_Screenshots.pdf](./Module13_Screenshots.pdf) – Screnshots of GitHub Actions and demonstration of user registration/login and operational calculation endpoints
-
-1. User registration (POST /users/register)  
-2. User login with token response  
-3. Swagger Authorize dialog  
-4. Create calculation request/response  
-5. Get calculations response  
-6. GitHub Actions passing  
 
 ---
 
@@ -223,4 +245,8 @@ Reflection on experience with this module:
 
 - [Module13_Reflection.pdf](./Module13_Reflection.pdf) – Reflection  
 
-The project integrates all major backend concepts into a working, production-style application.
+---
+
+## Summary
+
+This project brings together frontend development, backend logic, authentication, database integration, testing, and deployment into a complete full-stack application. It demonstrates how modern web systems are built, secured, tested, and deployed using industry-relevant tools and practices.
