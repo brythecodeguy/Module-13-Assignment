@@ -235,21 +235,50 @@ function setupDashboard() {
         });
     }
 
+    const operationButtons = document.querySelectorAll(".operation-btn");
+    const calcTypeInput = document.getElementById("calcType");
+
+    operationButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+            operationButtons.forEach((btn) => {
+                btn.classList.remove(
+                    "border-emerald-500",
+                    "text-emerald-600",
+                    "bg-emerald-50"
+                );
+                btn.classList.add(
+                    "border-gray-300",
+                    "text-gray-700",
+                    "bg-white"
+                );
+            });
+
+            button.classList.remove(
+                "border-gray-300",
+                "text-gray-700",
+                "bg-white"
+            );
+            button.classList.add(
+                "border-emerald-500",
+                "text-emerald-600",
+                "bg-emerald-50"
+            );
+
+            calcTypeInput.value = button.dataset.value;
+        });
+    });
+
     const calculationForm = document.getElementById("calculationForm");
     if (calculationForm) {
         calculationForm.addEventListener("submit", async (event) => {
             event.preventDefault();
 
             const calcType = document.getElementById("calcType").value;
-            const rawInputs = document.getElementById("calcInputs").value;
+            const a = parseFloat(document.getElementById("calcA").value);
+            const b = parseFloat(document.getElementById("calcB").value);
 
-            const inputs = rawInputs
-                .split(",")
-                .map((value) => parseFloat(value.trim()))
-                .filter((value) => !Number.isNaN(value));
-
-            if (inputs.length < 2) {
-                showMessage("dashboardError", "dashboardSuccess", "Please enter at least two valid numbers.");
+            if (Number.isNaN(a) || Number.isNaN(b)) {
+                showMessage("dashboardError", "dashboardSuccess", "Please enter two valid numbers.");
                 return;
             }
 
@@ -261,8 +290,9 @@ function setupDashboard() {
                         "Authorization": `Bearer ${token}`
                     },
                     body: JSON.stringify({
-                        type: calcType,
-                        inputs: inputs
+                        a: a,
+                        b: b,
+                        type: calcType
                     })
                 });
 
@@ -325,9 +355,7 @@ function setupDashboard() {
             data.forEach((calc) => {
                 const row = document.createElement("tr");
 
-                const inputsText = Array.isArray(calc.inputs)
-                    ? calc.inputs.join(", ")
-                    : "";
+                const inputsText = `${calc.a ?? ""}, ${calc.b ?? ""}`;
 
                 const dateText = calc.created_at
                     ? new Date(calc.created_at).toLocaleString()
