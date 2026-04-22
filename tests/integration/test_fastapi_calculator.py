@@ -800,3 +800,18 @@ def test_update_calculation_internal_error_direct(monkeypatch):
 
     assert exc_info.value.status_code == 500
     assert exc_info.value.detail == "Internal Server Error"
+
+
+def test_login_page(client):
+    response = client.get("/login")
+    assert response.status_code == 200
+
+
+def test_register_page(client):
+    response = client.get("/register")
+    assert response.status_code == 200
+
+
+def test_dashboard_page(client):
+    response = client.get("/dashboard")
+    assert response.status_code == 200

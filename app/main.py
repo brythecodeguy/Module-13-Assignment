@@ -119,10 +119,6 @@ async def validation_exception_handler(request: Request, exc: RequestValidationE
 # -----------------------------
 # Existing frontend routes
 # -----------------------------
-@app.get("/")
-async def index(request: Request):
-    return templates.TemplateResponse("index.html", {"request": request})
-
 
 @app.post("/add", response_model=OperationResponse, responses={400: {"model": ErrorResponse}})
 async def add_route(operation: OperationRequest):
